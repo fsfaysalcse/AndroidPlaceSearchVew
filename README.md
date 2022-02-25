@@ -4,6 +4,8 @@
 
 > A small library that integrating your autocomplete Edittext to the Google Places API.
 
+![DEMO](https://github.com/fsfaysalcse/AndroidPlacesView/raw/16fd4fb480bdc0b5f31a144b8980471074aec7db/demo.png)
+
 ## Installation
 
 To get a Git project into your build:
