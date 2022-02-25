@@ -5,8 +5,8 @@ import android.content.Context
 import android.library.PlaceSearch
 import android.library.R
 import android.library.databinding.AutocompleteListItemBinding
-import android.library.models.OnPlacesListListener
-import android.library.models.places.Result
+import android.library.databinding.AutocompleteListItemBinding.*
+import android.library.models.places.Places
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -14,8 +14,6 @@ import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.Filter
 import android.widget.Filterable
-import android.widget.ImageView
-import android.widget.TextView
 
 /**
  * Created by Faysal Hossain
@@ -24,9 +22,9 @@ import android.widget.TextView
 private const val TAG = "PlacesAutoCompleteAdapt"
 
 class PlacesAutoCompleteAdapter(mContext: Context, val placesApi: PlaceSearch) :
-    ArrayAdapter<Result>(mContext, R.layout.autocomplete_list_item), Filterable {
+    ArrayAdapter<Places>(mContext, R.layout.autocomplete_list_item), Filterable {
 
-    var resultList: ArrayList<Result> = ArrayList()
+    var resultList: ArrayList<Places> = ArrayList()
 
     override fun getCount(): Int {
         return when {
@@ -35,9 +33,9 @@ class PlacesAutoCompleteAdapter(mContext: Context, val placesApi: PlaceSearch) :
         }
     }
 
-    override fun getItem(position: Int): Result {
+    override fun getItem(position: Int): Places {
         return when {
-            resultList.isNullOrEmpty() -> Result()
+            resultList.isNullOrEmpty() -> Places()
             else -> resultList[position]
         }
     }
@@ -45,7 +43,7 @@ class PlacesAutoCompleteAdapter(mContext: Context, val placesApi: PlaceSearch) :
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
         var view = convertView
         val inflater = LayoutInflater.from(context)
-        val binding = AutocompleteListItemBinding.inflate(inflater, parent, false)
+        val binding = inflate(inflater, parent, false)
         view = binding.root
         view.tag = binding.root.tag
         val place = resultList[position]
@@ -53,7 +51,7 @@ class PlacesAutoCompleteAdapter(mContext: Context, val placesApi: PlaceSearch) :
         return view
     }
 
-    private fun bindView(binding: AutocompleteListItemBinding, place: Result, position: Int) {
+    private fun bindView(binding: AutocompleteListItemBinding, place: Places, position: Int) {
         if (!resultList.isNullOrEmpty()) {
 
             if (place.isError) {
@@ -100,7 +98,7 @@ class PlacesAutoCompleteAdapter(mContext: Context, val placesApi: PlaceSearch) :
                         Log.d(TAG, "performFiltering: ${parResponse.second}")
                         resultList.clear()
                         resultList.add(
-                            Result(
+                            Places(
                                 errorMessage = parResponse.second,
                                 isError = true
                             )

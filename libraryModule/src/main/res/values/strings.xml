@@ -5,5 +5,4 @@
   <string name="error_cannot_process_json_results">Cannot process JSON results</string>
   <string name="error_lib_not_initialized">Please initialize the api before using it</string>
 
-
 </resources>

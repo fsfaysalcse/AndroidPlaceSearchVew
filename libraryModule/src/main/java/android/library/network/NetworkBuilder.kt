@@ -7,12 +7,12 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
 object NetworkBuilder {
-    fun provideMapAPI(): MapInterface = Retrofit.Builder()
+    fun provideMapAPI(): MapServiceApi = Retrofit.Builder()
         .baseUrl(Constants.BASE_URL)
         .addConverterFactory(GsonConverterFactory.create())
         .client(client)
         .build()
-        .create(MapInterface::class.java)
+        .create(MapServiceApi::class.java)
 
     private val client = OkHttpClient.Builder()
         .addInterceptor(

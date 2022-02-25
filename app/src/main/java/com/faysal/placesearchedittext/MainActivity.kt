@@ -2,8 +2,9 @@ package com.faysal.placesearchedittext
 
 import android.library.PlaceSearch
 import android.library.adapters.PlacesAutoCompleteAdapter
-import android.library.models.details.PlaceDetailsDTO
-import android.library.models.places.Result
+import android.library.models.OnPlaceDetailsListener
+import android.library.models.details.PlaceDetails
+import android.library.models.places.Places
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.AdapterView
@@ -11,12 +12,13 @@ import android.widget.Toast
 import com.faysal.placesearchedittext.databinding.ActivityMainBinding
 import java.lang.StringBuilder
 
+const val GOOGLE_MAP_API_KEY : String = "ENTER GOOGLE MAP API KEY HERE"
 class MainActivity : AppCompatActivity() {
 
     lateinit var binding: ActivityMainBinding
 
-    val placesApi = PlaceSearch.Builder()
-        .apiKey("AIzaSyBvOFVDazvd9et5EEafsE2jHdFJpF604-Y")
+    private val placesApi = PlaceSearch.Builder()
+        .apiKey(GOOGLE_MAP_API_KEY)
         .build(this@MainActivity)
 
 
@@ -28,7 +30,7 @@ class MainActivity : AppCompatActivity() {
         binding.autoCompleteEditText.setAdapter(PlacesAutoCompleteAdapter(this, placesApi))
         binding.autoCompleteEditText.onItemClickListener =
             AdapterView.OnItemClickListener { parent, _, position, _ ->
-                val place = parent.getItemAtPosition(position) as Result
+                val place = parent.getItemAtPosition(position) as Places
                 setupUI(place)
                /* val place = parent.getItemAtPosition(position) as Place
                 binding.autoCompleteEditText.setText(place.description)
@@ -37,20 +39,21 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun getPlaceDetails(placeId: String) {
-       /* placesApi.fetchPlaceDetails(placeId, object :
+        placesApi.getPlaceDetails(placeId, object :
             OnPlaceDetailsListener {
             override fun onError(errorMessage: String) {
                 Toast.makeText(this@MainActivity, errorMessage, Toast.LENGTH_SHORT).show()
             }
 
-            override fun onPlaceDetailsFetched(placeDetails: PlaceDetails) {
-                setupUI(placeDetails)
+            override fun onSuccess(placeDetails: PlaceDetails) {
+              //
             }
-        })*/
+        })
     }
 
-    private fun setupUI(placeDetails: Result) {
+    private fun setupUI(placeDetails: Places) {
         val builder = StringBuilder()
+        builder.append("Place Id : ${placeDetails.place_id} \n")
         builder.append("Name : ${placeDetails.name} \n")
         builder.append("Address : ${placeDetails.formatted_address} \n")
         builder.append("latitude : ${placeDetails.geometry.location.lat} \n")

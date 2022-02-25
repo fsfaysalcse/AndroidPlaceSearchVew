@@ -1,6 +1,6 @@
 package android.library.models.places
 
-data class Result(
+data class Places(
     val formatted_address: String = "",
     val geometry: Geometry = Geometry(),
     val icon: String = "",

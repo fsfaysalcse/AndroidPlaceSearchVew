@@ -7,7 +7,7 @@ import retrofit2.Call
 import retrofit2.http.GET
 import retrofit2.http.Query
 
-interface MapInterface {
+interface MapServiceApi {
 
     @GET(Constants.PLACE_LIST_ENDPOINT)
     fun getPlacesList(
