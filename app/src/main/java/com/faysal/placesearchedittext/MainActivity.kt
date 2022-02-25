@@ -1,24 +1,23 @@
 package com.faysal.placesearchedittext
 
 
-import com.faysal.placeview.PlaceSearch
+import android.os.Bundle
+import android.widget.AdapterView
+import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
+import com.faysal.placesearchedittext.databinding.ActivityMainBinding
+import com.faysal.placeview.PlacesView
 import com.faysal.placeview.adapters.PlacesAutoCompleteAdapter
 import com.faysal.placeview.models.OnPlaceDetailsListener
 import com.faysal.placeview.models.details.PlaceDetails
 import com.faysal.placeview.models.places.Places
-import androidx.appcompat.app.AppCompatActivity
-import android.os.Bundle
-import android.widget.AdapterView
-import android.widget.Toast
-import com.faysal.placesearchedittext.databinding.ActivityMainBinding
-import java.lang.StringBuilder
 
 const val GOOGLE_MAP_API_KEY : String = "ENTER GOOGLE MAP API KEY HERE"
 class MainActivity : AppCompatActivity() {
 
     lateinit var binding: ActivityMainBinding
 
-    private val placesApi = PlaceSearch.Builder()
+    private val placesApi = PlacesView.Builder()
         .apiKey(GOOGLE_MAP_API_KEY)
         .build(this@MainActivity)
 

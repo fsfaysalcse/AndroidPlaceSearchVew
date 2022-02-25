@@ -5,8 +5,6 @@ import android.content.Context
 import android.library.R
 import android.library.databinding.AutocompleteListItemBinding
 import android.library.databinding.AutocompleteListItemBinding.inflate
-import com.faysal.placeview.PlaceSearch
-import com.faysal.placeview.models.places.Places
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -14,6 +12,8 @@ import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.Filter
 import android.widget.Filterable
+import com.faysal.placeview.PlacesView
+import com.faysal.placeview.models.places.Places
 
 /**
  * Created by Faysal Hossain
@@ -21,7 +21,7 @@ import android.widget.Filterable
 
 private const val TAG = "PlacesAutoCompleteAdapt"
 
-class PlacesAutoCompleteAdapter(mContext: Context, val placesApi: PlaceSearch) :
+class PlacesAutoCompleteAdapter(mContext: Context, val placesApi: PlacesView) :
     ArrayAdapter<Places>(mContext, R.layout.autocomplete_list_item), Filterable {
 
     var resultList: ArrayList<Places> = ArrayList()

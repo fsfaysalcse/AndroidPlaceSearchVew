@@ -13,7 +13,7 @@ import retrofit2.Response
 
 private const val TAG = "PlaceSearch"
 
-class PlaceSearch(
+class PlacesView(
     private val apiKey: String,
     private val context: Context
 ) {
@@ -30,7 +30,7 @@ class PlaceSearch(
         /**
          * Builds and creates an object of the PlaceSearch
          */
-        fun build(context: Context) = PlaceSearch(apiKey, context)
+        fun build(context: Context) = PlacesView(apiKey, context)
     }
 
     fun Context.getStr(id: Int) = this.resources.getString(id)
