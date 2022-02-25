@@ -1,10 +1,11 @@
 package com.faysal.placesearchedittext
 
-import android.library.PlaceSearch
-import android.library.adapters.PlacesAutoCompleteAdapter
-import android.library.models.OnPlaceDetailsListener
-import android.library.models.details.PlaceDetails
-import android.library.models.places.Places
+
+import com.faysal.library.PlaceSearch
+import com.faysal.library.adapters.PlacesAutoCompleteAdapter
+import com.faysal.library.models.OnPlaceDetailsListener
+import com.faysal.library.models.details.PlaceDetails
+import com.faysal.library.models.places.Places
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.AdapterView
