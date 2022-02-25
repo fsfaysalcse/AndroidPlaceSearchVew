@@ -31,10 +31,13 @@ Step 2. Add the dependency
 ## Usage
 
 ```xml
-
-<AutoCompleteTextView android:id="@+id/autoCompleteEditText" android:layout_width="match_parent"
-    android:layout_height="wrap_content" android:background="@drawable/bg_auto_compleate"
-    android:hint="@string/type_in_your_location" android:padding="8dp" />
+<AutoCompleteTextView 
+    android:id="@+id/autoCompleteEditText" 
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content" 
+    android:background="@drawable/bg_auto_compleate"
+    android:hint="@string/type_in_your_location" 
+    android:padding="8dp" />
 
 ```
 
