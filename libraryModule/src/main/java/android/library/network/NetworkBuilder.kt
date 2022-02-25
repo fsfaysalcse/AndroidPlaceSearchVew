@@ -14,7 +14,7 @@ object NetworkBuilder {
         .build()
         .create(MapInterface::class.java)
 
-    val client = OkHttpClient.Builder()
+    private val client = OkHttpClient.Builder()
         .addInterceptor(
             HttpLoggingInterceptor()
                 .setLevel(HttpLoggingInterceptor.Level.BODY)

@@ -7,11 +7,13 @@ import android.library.models.places.Result
 import android.library.network.MapInterface
 import android.library.network.NetworkBuilder
 import android.util.Log
+import androidx.core.content.ContextCompat
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
 private const val TAG = "PlaceSearch"
+
 class PlaceSearch(
     private val apiKey: String,
     private val context: Context
@@ -21,17 +23,25 @@ class PlaceSearch(
         NetworkBuilder.provideMapAPI()
     }
 
-    internal fun getPlaces(query: String) : Pair<List<Result>,String> {
+    internal fun getPlaces(query: String): Pair<List<Result>, String> {
         return try {
             val response = apiService.getPlacesList(apiKey, query).execute()
             val responseBody = response.body()
-            if (response.isSuccessful && responseBody?.status == "OK"){
-                Pair(responseBody.results,responseBody.error_message.toString())
-            }else{
-                Pair(emptyList(),responseBody?.error_message.toString())
+            if (response.isSuccessful && responseBody?.status == "OK") {
+                responseBody.results.forEach {
+                    Log.d(TAG, "getPlaces: ${it.formatted_address}")
+                }
+
+                Pair(responseBody.results, responseBody.error_message.toString())
+
+            } else {
+                Pair(emptyList(), responseBody?.error_message.toString())
             }
-        }catch (e : Exception){
-            Pair(emptyList(), e.message.toString() ?: "Failed something Wrong !")
+        } catch (e: Exception) {
+            Pair(
+                emptyList(),
+                e.message.toString() ?: context.getStr(R.string.error_connecting_to_places_api)
+            )
         }
     }
 
@@ -43,14 +53,16 @@ class PlaceSearch(
             ) {
                 if (response.isSuccessful && response.body() != null) {
                     listener.onPlaceDetails(response.body()!!.result)
-                }else{
+                } else {
                     val errorResponse = response.errorBody().toString()
-                    listener.onError(errorResponse?: "Failed something wrong !!")
+                    listener.onError(
+                        errorResponse ?: context.getStr(R.string.error_connecting_to_places_api)
+                    )
                 }
             }
 
             override fun onFailure(call: Call<PlaceDetailsDTO>, t: Throwable) {
-                val errorMessage =  t.message
+                val errorMessage = t.message
                 listener.onError(errorMessage.toString())
             }
 
@@ -70,6 +82,8 @@ class PlaceSearch(
          */
         fun build(context: Context) = PlaceSearch(apiKey, context)
     }
+
+    fun Context.getStr(id: Int) = this.resources.getString(id)
 
 
 }

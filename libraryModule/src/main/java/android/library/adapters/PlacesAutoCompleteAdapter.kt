@@ -4,6 +4,7 @@ package android.library.adapters
 import android.content.Context
 import android.library.PlaceSearch
 import android.library.R
+import android.library.databinding.AutocompleteListItemBinding
 import android.library.models.OnPlacesListListener
 import android.library.models.places.Result
 import android.util.Log
@@ -17,7 +18,7 @@ import android.widget.ImageView
 import android.widget.TextView
 
 /**
- * Created by mukeshsolanki on 28/02/19.
+ * Created by Faysal Hossain
  */
 
 private const val TAG = "PlacesAutoCompleteAdapt"
@@ -28,41 +29,49 @@ class PlacesAutoCompleteAdapter(mContext: Context, val placesApi: PlaceSearch) :
     var resultList: ArrayList<Result> = ArrayList()
 
     override fun getCount(): Int {
-        return resultList.size
+        return when {
+            resultList.isNullOrEmpty() -> 0
+            else -> resultList.size
+        }
     }
 
     override fun getItem(position: Int): Result {
-        return resultList[position]
+        return when {
+            resultList.isNullOrEmpty() -> Result()
+            else -> resultList[position]
+        }
     }
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
         var view = convertView
-        val viewHolder: ViewHolder
-        if (view == null) {
-            viewHolder = ViewHolder()
-            val inflater = LayoutInflater.from(context)
-            view = inflater.inflate(R.layout.autocomplete_list_item, parent, false)
-            viewHolder.description = view.findViewById(R.id.autocompleteText) as TextView
-            viewHolder.footerImageView = view.findViewById(R.id.footerImageView) as ImageView
-            view.tag = viewHolder
-        } else {
-            viewHolder = view.tag as ViewHolder
-        }
+        val inflater = LayoutInflater.from(context)
+        val binding = AutocompleteListItemBinding.inflate(inflater, parent, false)
+        view = binding.root
+        view.tag = binding.root.tag
         val place = resultList[position]
-        bindView(viewHolder, place, position)
-        return view!!
+        bindView(binding, place, position)
+        return view
     }
 
-    private fun bindView(viewHolder: ViewHolder, place: Result, position: Int) {
+    private fun bindView(binding: AutocompleteListItemBinding, place: Result, position: Int) {
         if (!resultList.isNullOrEmpty()) {
-            if (position != resultList.size - 1) {
-                viewHolder.description?.text = place.formatted_address
-                viewHolder.footerImageView?.visibility = View.GONE
-                viewHolder.description?.visibility = View.VISIBLE
-            } else {
-                viewHolder.footerImageView?.visibility = View.VISIBLE
-                viewHolder.description?.visibility = View.GONE
+
+            if (place.isError) {
+                binding.bottomImage.visibility = View.GONE
+                binding.title.visibility = View.GONE
+                binding.placeIcon.visibility = View.GONE
+                binding.errorMessage.visibility = View.VISIBLE
+                binding.errorMessage.text = place.errorMessage
+                return
             }
+
+            binding.title.text = place.formatted_address
+            if (position == resultList.size - 1) {
+                binding.bottomImage.visibility = View.VISIBLE
+            } else {
+                binding.bottomImage.visibility = View.GONE
+            }
+
         }
     }
 
@@ -80,17 +89,22 @@ class PlacesAutoCompleteAdapter(mContext: Context, val placesApi: PlaceSearch) :
                 val filterResults = FilterResults()
                 if (constraint != null) {
                     val parResponse = placesApi.getPlaces(constraint.toString())
-                    return if (parResponse.first.isNotEmpty() && parResponse.second.isEmpty()){
+                    return if (parResponse.first.isNotEmpty() && parResponse.second.isEmpty()) {
                         Log.d(TAG, "performFiltering: ${parResponse.first.size}")
                         resultList.clear()
                         resultList.addAll(parResponse.first.filter { it.formatted_address.isNotEmpty() })
                         filterResults.values = resultList
                         filterResults.count = resultList.size
                         filterResults
-                    }else{
+                    } else {
                         Log.d(TAG, "performFiltering: ${parResponse.second}")
                         resultList.clear()
-                        resultList.add(Result(formatted_address = "${parResponse.second}", isEmpty = true))
+                        resultList.add(
+                            Result(
+                                errorMessage = parResponse.second,
+                                isError = true
+                            )
+                        )
                         filterResults.values = resultList
                         filterResults.count = resultList.size
                         filterResults
@@ -102,9 +116,4 @@ class PlacesAutoCompleteAdapter(mContext: Context, val placesApi: PlaceSearch) :
     }
 
 
-
-    internal class ViewHolder {
-        var description: TextView? = null
-        var footerImageView: ImageView? = null
-    }
 }

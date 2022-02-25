@@ -11,5 +11,8 @@ data class Result(
     val place_id: String = "",
     val reference: String = "",
     val types: List<String> = emptyList(),
-    val isEmpty : Boolean = false
+
+    /*These variable for handling library UI*/
+    val isError : Boolean = false,
+    val errorMessage : String = ""
 )

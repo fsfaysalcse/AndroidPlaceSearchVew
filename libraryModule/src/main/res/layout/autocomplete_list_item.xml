@@ -4,6 +4,7 @@
     android:layout_height="wrap_content"
     xmlns:tools="http://schemas.android.com/tools"
     android:padding="10dp"
+    android:background="@android:color/white"
     android:orientation="vertical">
 
     <LinearLayout
@@ -12,30 +13,52 @@
         android:orientation="horizontal">
 
         <ImageView
+            android:id="@+id/placeIcon"
             android:layout_width="20dp"
             android:layout_height="20dp"
-            android:layout_alignParentEnd="true"
             android:src="@drawable/ic_baseline_location_on_24"
             android:visibility="visible"
+            android:drawableTint="@android:color/black"
             android:layout_gravity="center"/>
 
         <TextView
-            android:id="@+id/autocompleteText"
+            android:id="@+id/title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             tools:text="@string/app_name"
             android:fontFamily="@font/dm_sans"
             android:layout_gravity="center"
-            android:layout_marginLeft="10dp"/>
+            android:layout_marginLeft="10dp"
+            android:maxLines="2"
+            android:textColor="@android:color/black"
+            android:ellipsize="end"/>
 
     </LinearLayout>
 
 
     <ImageView
-        android:id="@+id/footerImageView"
+        android:id="@+id/bottom_image"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:src="@drawable/powered_by_google"
-        android:visibility="gone"
+        android:visibility="visible"
         android:layout_gravity="right"/>
+
+    <TextView
+        android:id="@+id/errorMessage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        tools:text="Something Wrong"
+        android:gravity="center"
+        android:layout_gravity="center"
+        android:textSize="17sp"
+        android:fontFamily="@font/dm_sans"
+        android:drawablePadding="10dp"
+        android:padding="10dp"
+        android:maxLines="1"
+        android:ellipsize="end"
+        android:visibility="gone"
+        android:drawableTint="@android:color/black"
+        android:drawableLeft="@drawable/ic_error_search"/>
+
 </LinearLayout>
