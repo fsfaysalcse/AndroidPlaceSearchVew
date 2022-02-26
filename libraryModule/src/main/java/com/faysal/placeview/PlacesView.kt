@@ -5,11 +5,12 @@ import android.library.R
 import com.faysal.placeview.models.OnPlaceDetailsListener
 import com.faysal.placeview.models.details.PlaceDetailsDTO
 import com.faysal.placeview.models.places.Places
-import com.faysal.placeview.network.MapServiceApi
+import com.faysal.placeview.models.places.PlacesDTO
 import com.faysal.placeview.network.NetworkBuilder
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
+import com.google.gson.Gson
+import okhttp3.OkHttpClient
+import okhttp3.Request
+import java.io.IOException
 
 private const val TAG = "PlaceSearch"
 
@@ -41,44 +42,62 @@ class PlacesView(
     }
 
     internal fun getPlaces(query: String): Pair<List<Places>, String> {
+
         return try {
-            val response = apiService.getPlacesList(apiKey, query).execute()
-            val responseBody = response.body()
+            val request: Request = Request.Builder()
+                .url(NetworkBuilder.providePlacesUrl(apiKey,query))
+                .build()
+
+            val response = OkHttpClient().newCall(request).execute()
+            val responseBody = Gson().fromJson(response.body()?.string(),PlacesDTO::class.java)
             if (response.isSuccessful && responseBody?.status == "OK") {
-                Pair(responseBody.results, responseBody.error_message.toString())
+                Pair(responseBody.results,"")
             } else {
                 Pair(emptyList(), responseBody?.error_message.toString())
             }
         } catch (e: Exception) {
-            Pair(
-                emptyList(),
-                e.message.toString() ?: context.getStr(R.string.error_connecting_to_places_api)
-            )
+            Pair(emptyList(),provideErrorMessage(e))
         }
     }
 
     fun getPlaceDetails(placeID: String, listener: OnPlaceDetailsListener) {
-        apiService.getPlaceDetails(apiKey, placeID).enqueue(object : Callback<PlaceDetailsDTO> {
-            override fun onResponse(
-                call: Call<PlaceDetailsDTO>,
-                response: Response<PlaceDetailsDTO>
-            ) {
-                if (response.isSuccessful && response.body() != null) {
-                    listener.onSuccess(response.body()!!.result)
-                } else {
-                    val errorResponse = response.errorBody().toString()
-                    listener.onError(
-                        errorResponse ?: context.getStr(R.string.error_connecting_to_places_api)
-                    )
+        try {
+            val request: Request = Request.Builder()
+                .url(NetworkBuilder.provideDetailsUrl(apiKey, placeID))
+                .build()
+            OkHttpClient().newCall(request).enqueue(object : okhttp3.Callback {
+                override fun onFailure(call: okhttp3.Call, e: IOException) {
+                    val errorMessage = e.message
+                    listener.onError(provideErrorMessage(errorMessage))
                 }
-            }
-            override fun onFailure(call: Call<PlaceDetailsDTO>, t: Throwable) {
-                val errorMessage = t.message
-                listener.onError(errorMessage.toString()?: context.getStr(R.string.error_connecting_to_places_api))
-            }
-        })
+
+                override fun onResponse(call: okhttp3.Call, response: okhttp3.Response) {
+                    if (response.isSuccessful && response.body() != null) {
+                        val rawResponse = response.body()!!.string()
+                        val responseBody = Gson().fromJson(rawResponse, PlaceDetailsDTO::class.java)
+                        if (responseBody.status == "OK") {
+                            listener.onSuccess(responseBody.result)
+                        } else {
+                            val errorResponse = responseBody.error_message
+                            listener.onError(provideErrorMessage(errorResponse))
+                        }
+                    } else {
+                        listener.onError(context.getStr(R.string.error_connecting_to_places_api))
+                    }
+                }
+
+            })
+        } catch (e: Exception) {
+            listener.onError(provideErrorMessage(e))
+        }
     }
 
+    private fun provideErrorMessage(e : Exception) : String {
+        return e.message.toString() ?: context.getStr(R.string.error_connecting_to_places_api)
+    }
+    private fun provideErrorMessage(message  : String?) : String {
+        return message ?: context.getStr(R.string.error_connecting_to_places_api)
+    }
 
 }
 

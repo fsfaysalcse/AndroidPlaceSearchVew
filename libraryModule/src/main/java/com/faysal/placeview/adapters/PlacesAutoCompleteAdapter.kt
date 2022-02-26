@@ -63,6 +63,10 @@ class PlacesAutoCompleteAdapter(mContext: Context, val placesApi: PlacesView) :
                 return
             }
 
+            if (place.errorMessage.isEmpty()){
+                binding.errorMessage.visibility = View.GONE
+            }
+
             binding.title.text = place.formatted_address
             if (position == resultList.size - 1) {
                 binding.bottomImage.visibility = View.VISIBLE

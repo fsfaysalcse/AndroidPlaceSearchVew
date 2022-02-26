@@ -2,6 +2,7 @@ package com.faysal.placesearchedittext
 
 
 import android.os.Bundle
+import android.util.Log
 import android.widget.AdapterView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -12,7 +13,9 @@ import com.faysal.placeview.models.OnPlaceDetailsListener
 import com.faysal.placeview.models.details.PlaceDetails
 import com.faysal.placeview.models.places.Places
 
-const val GOOGLE_MAP_API_KEY : String = "ENTER GOOGLE MAP API KEY HERE"
+
+private const val TAG = "MainActivity"
+const val GOOGLE_MAP_API_KEY : String = ""
 class MainActivity : AppCompatActivity() {
 
     lateinit var binding: ActivityMainBinding
@@ -32,20 +35,19 @@ class MainActivity : AppCompatActivity() {
             AdapterView.OnItemClickListener { parent, _, position, _ ->
                 val place = parent.getItemAtPosition(position) as Places
                 setupUI(place)
-               /* val place = parent.getItemAtPosition(position) as Place
-                binding.autoCompleteEditText.setText(place.description)
-                getPlaceDetails(place.id)*/
+                getPlaceDetails(place.place_id)
             }
     }
-
     private fun getPlaceDetails(placeId: String) {
         placesApi.getPlaceDetails(placeId, object :
             OnPlaceDetailsListener {
             override fun onError(errorMessage: String) {
+                Log.d(TAG, "onError: $errorMessage")
                 Toast.makeText(this@MainActivity, errorMessage, Toast.LENGTH_SHORT).show()
             }
 
             override fun onSuccess(placeDetails: PlaceDetails) {
+                Log.d(TAG, "onSuccess: $placeDetails")
               //
             }
         })

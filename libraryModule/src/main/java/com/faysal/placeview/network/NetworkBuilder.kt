@@ -1,13 +1,36 @@
 package com.faysal.placeview.network
 
 import com.faysal.placeview.utlity.Constants
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
+import okhttp3.HttpUrl
+import okhttp3.OkHttpClient
+import okhttp3.Request
+import okhttp3.Response
 
 object NetworkBuilder {
-    fun provideMapAPI(): MapServiceApi = Retrofit.Builder()
-        .baseUrl(Constants.BASE_URL)
-        .addConverterFactory(GsonConverterFactory.create())
-        .build()
-        .create(MapServiceApi::class.java)
+
+    fun providePlacesUrl(apiKey : String,query : String) : String {
+        return HttpUrl.parse(Constants.BASE_URL)!!
+            .newBuilder()
+            .addQueryParameter("key", apiKey)
+            .addQueryParameter("query", query)
+            .build().toString()
+
+    }
+
+    fun provideDetailsUrl(apiKey : String,place_id : String) : String {
+        return HttpUrl.parse(Constants.BASE_URL)!!
+            .newBuilder()
+            .addQueryParameter("key", apiKey)
+            .addQueryParameter("place_id", place_id)
+            .build().toString()
+
+    }
+    fun provideRequestBuilder(rawUrl : String): Response {
+        val request: Request = Request.Builder().url(rawUrl).build()
+        return OkHttpClient()
+            .newCall(request)
+            .execute()
+    }
+
 }
+
