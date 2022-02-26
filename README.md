@@ -24,7 +24,7 @@ Step 2. Add the dependency
 
 ```bash
   dependencies {
-	   implementation 'com.github.fsfaysalcse:AndroidPlacesView:1.0'
+	   implementation 'com.github.fsfaysalcse:AndroidPlacesView:1.1'
 	}
 ```
 
