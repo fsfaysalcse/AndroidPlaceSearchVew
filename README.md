@@ -1,10 +1,10 @@
 # Android Places Search View
 
-<img src='https://img.shields.io/badge/kotlin-%230095D5.svg?&style=for-the-badge&logo=kotlin&logoColor=white' height='25'/><img src='https://img.shields.io/badge/Android-3DDC84?logo=android&logoColor=white&style=for-the-badge' height='25'/><img src='https://jitpack.io/v/fsfaysalcse/AndroidPlacesView.svg?style=for-the-badge&logo=appveyor' height='25'/>
+<img src='https://img.shields.io/badge/kotlin-%230095D5.svg?&style=for-the-badge&logo=kotlin&logoColor=white' height='25'/><img src='https://img.shields.io/badge/Android-3DDC84?logo=android&logoColor=white&style=for-the-badge' height='25'/><img src='https://jitpack.io/v/fsfaysalcse/AndroidPlaceSearchVew.svg?style=for-the-badge&logo=appveyor' height='25'/>
 
 > A small library that integrating your autocomplete Edittext to the Google Places API.
 
-![DEMO](https://github.com/fsfaysalcse/AndroidPlacesView/raw/16fd4fb480bdc0b5f31a144b8980471074aec7db/demo.png)
+![DEMO](https://github.com/fsfaysalcse/AndroidPlaceSearchVew/raw/16fd4fb480bdc0b5f31a144b8980471074aec7db/demo.png)
 
 ## Installation
 
