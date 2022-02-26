@@ -55,7 +55,7 @@ afterEvaluate {
                 from components.release
 
                 groupId = 'com.github.fsfaysalcse'
-                artifactId = 'AndroidPlacesView'
+                artifactId = 'AndroidPlaceSearchVew'
                 version = '1.0'
             }
         }
