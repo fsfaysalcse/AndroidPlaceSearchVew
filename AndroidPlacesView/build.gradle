@@ -41,8 +41,12 @@ dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation 'androidx.core:core-ktx:1.7.0'
     implementation 'androidx.appcompat:appcompat:1.4.1'
+
     //Okhttp for networking
-    implementation 'com.squareup.okhttp:okhttp:2.7.5'
+    implementation 'com.squareup.okhttp3:okhttp:4.9.3'
+
+    //Gson
+    implementation 'com.google.code.gson:gson:2.9.0'
 }
 afterEvaluate {
     publishing {
@@ -51,7 +55,7 @@ afterEvaluate {
                 from components.release
 
                 groupId = 'com.github.fsfaysalcse'
-                artifactId = 'AndroidPlacesSearchVew'
+                artifactId = 'AndroidPlacesView'
                 version = '1.0'
             }
         }

@@ -37,9 +37,6 @@ class PlacesView(
     fun Context.getStr(id: Int) = this.resources.getString(id)
 
 
-    private val apiService: MapServiceApi by lazy {
-        NetworkBuilder.provideMapAPI()
-    }
 
     internal fun getPlaces(query: String): Pair<List<Places>, String> {
 
@@ -49,7 +46,7 @@ class PlacesView(
                 .build()
 
             val response = OkHttpClient().newCall(request).execute()
-            val responseBody = Gson().fromJson(response.body()?.string(),PlacesDTO::class.java)
+            val responseBody = Gson().fromJson(response.body?.string(),PlacesDTO::class.java)
             if (response.isSuccessful && responseBody?.status == "OK") {
                 Pair(responseBody.results,"")
             } else {
@@ -72,8 +69,8 @@ class PlacesView(
                 }
 
                 override fun onResponse(call: okhttp3.Call, response: okhttp3.Response) {
-                    if (response.isSuccessful && response.body() != null) {
-                        val rawResponse = response.body()!!.string()
+                    if (response.isSuccessful && response.body != null) {
+                        val rawResponse = response.body!!.string()
                         val responseBody = Gson().fromJson(rawResponse, PlaceDetailsDTO::class.java)
                         if (responseBody.status == "OK") {
                             listener.onSuccess(responseBody.result)
