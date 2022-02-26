@@ -2,6 +2,7 @@ package com.faysal.placeview
 
 import android.content.Context
 import android.library.R
+import android.util.Log
 import com.faysal.placeview.models.OnPlaceDetailsListener
 import com.faysal.placeview.models.details.PlaceDetailsDTO
 import com.faysal.placeview.models.places.Places
@@ -44,7 +45,6 @@ class PlacesView(
             val request: Request = Request.Builder()
                 .url(NetworkBuilder.providePlacesUrl(apiKey,query))
                 .build()
-
             val response = OkHttpClient().newCall(request).execute()
             val responseBody = Gson().fromJson(response.body?.string(),PlacesDTO::class.java)
             if (response.isSuccessful && responseBody?.status == "OK") {
@@ -53,7 +53,8 @@ class PlacesView(
                 Pair(emptyList(), responseBody?.error_message.toString())
             }
         } catch (e: Exception) {
-            Pair(emptyList(),provideErrorMessage(e))
+            Log.d(TAG, "getPlaces: ${e.localizedMessage}")
+            Pair(emptyList(),context.getStr(R.string.error_connecting_to_places_api))
         }
     }
 
@@ -85,7 +86,8 @@ class PlacesView(
 
             })
         } catch (e: Exception) {
-            listener.onError(provideErrorMessage(e))
+            Log.d(TAG, "getPlaces: ${e.localizedMessage}")
+            listener.onError(context.getStr(R.string.error_connecting_to_places_api))
         }
     }
 
